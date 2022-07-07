@@ -5,5 +5,6 @@ Hola! Con esta app puedes buscar imágenes en Unsplash, guardarlas en localStora
 
 ## Tecnologías
 * ReactJS
+* React Router
 * Redux
 * Material UI
