@@ -1,16 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-// REVISAR
 export const searchImages = createAsyncThunk(
   'foundImages/fetchImages',
   async (searchTerm) => {
-    console.log(searchTerm)
     const options = {
       headers: {
         Authorization: `Client-ID ${process.env.REACT_APP_ACCESS_KEY}`
       }
     }
-    const data = await fetch(`${process.env.REACT_APP_API_URI}/search/photos?query=${searchTerm}`, options)
+    const data = await fetch(`${process.env.REACT_APP_API_URI}/search/photos?query=${searchTerm}&per_page=20`, options)
     const json = await data.json()
 
     return json
@@ -20,7 +18,7 @@ export const searchImages = createAsyncThunk(
 export const foundImagesSlice = createSlice({
   name: 'foundImages',
   initialState: {
-    images: undefined,
+    images: [],
     isLoadingFoundImages: false,
     hasError: false
   },
@@ -33,7 +31,7 @@ export const foundImagesSlice = createSlice({
       .addCase(searchImages.fulfilled, (state, action) => {
         state.isLoadingFoundImages = false
         state.hasError = false
-        state.images = action.payload
+        state.images = [...state.images, action.payload]
       })
       .addCase(searchImages.rejected, state => {
         state.isLoadingFoundImages = false

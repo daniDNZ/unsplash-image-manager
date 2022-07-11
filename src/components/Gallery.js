@@ -3,16 +3,25 @@ import { ImageListItemBar, ImageList, ImageListItem, IconButton } from '@mui/mat
 import { useEffect, useState } from 'react'
 import ImageModal from './ImageModal'
 
-const srcset = (image, size, rows = 1, cols = 1) => {
+const splitUrl = (url) => {
+  const splitted = url.split('?')[0]
+  return splitted
+}
+
+const srcset = (imgUrl, size) => {
+  const splitted = splitUrl(imgUrl)
   return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
+    src: `${splitted}?w=${size}&h=${size}&fit=crop&auto=format`,
+    srcSet: `${splitted}?w=${size}&h=${
+      size
     }&fit=crop&auto=format&dpr=2 2x`
   }
 }
 
 const Gallery = ({ itemData }) => {
+  const rowHeight = 121
+  const arrImages = itemData[itemData.length - 1].results
+
   const showImageBar = (e) => {
     e.currentTarget.children[1].style.opacity = 1
   }
@@ -45,12 +54,12 @@ const Gallery = ({ itemData }) => {
   }, [itemData])
   return (
     <>
-      <ImageList cols={4} variant='quilted' rowHeight={121}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img} data-id={item.id} cols={item.cols || 1} rows={item.rows || 1} className='image-list-item' onClick={handleOpen}>
+      <ImageList cols={4} variant='quilted' rowHeight={rowHeight}>
+        {arrImages.map((item) => (
+          <ImageListItem key={item.id} data-id={item.id} className='image-list-item' onClick={handleOpen}>
             <img
-              {...srcset(item.img, 121, item.rows, item.cols)}
-              alt={item.title}
+              {...srcset(item.urls.regular, rowHeight)}
+              alt={item.alt_description}
               loading='lazy'
             />
             <ImageListItemBar

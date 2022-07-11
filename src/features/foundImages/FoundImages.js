@@ -11,19 +11,21 @@ const FoundImages = () => {
   const imagesAreLoading = useSelector(isLoadingFoundImages)
   const imagesHasError = useSelector(hasErrorFoundImages)
 
-  console.log('searchterm ' + searchTerm)
-  console.log('images: ' + images)
-  console.log('images loading: ' + imagesAreLoading)
-  console.log('Error: ' + imagesHasError)
-
   useEffect(() => {
-    searchImages(searchTerm)
+    dispatch(searchImages(searchTerm))
+    // console.log('searchterm ' + searchTerm)
+    // console.log(images)
+    // console.log('images loading: ' + imagesAreLoading)
+    // console.log('Error: ' + imagesHasError)
   }, [dispatch, searchTerm])
 
   if (imagesAreLoading) return <div>Loading Images</div>
   if (!searchTerm) return null
+  if (imagesHasError) {
+    return <div>No podemos conectar con el servidor. Inténtelo más tarde</div>
+  }
   return (
-    <Gallery itemData={[]} />
+    <Gallery itemData={images} />
   )
 }
 
