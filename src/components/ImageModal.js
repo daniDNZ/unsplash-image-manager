@@ -1,4 +1,5 @@
 import { Modal, Box, Fade, Backdrop, Typography } from '@mui/material'
+import { splitUrl } from '../utils/functions'
 
 const modalStyle = {
   position: 'absolute',
@@ -8,15 +9,20 @@ const modalStyle = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
+  maxWidth: '80vw',
+  maxHeight: '80vh',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4
 }
 
-const ImageModal = ({ img, open, setOpen }) => {
+const ImageModal = ({ img, open, setOpen, addDate }) => {
   let src = ''
-  src = img.img + '?w=480&h=480&auto=format'
+
+  src = (img.urls ? splitUrl(img.urls.thumb) + '?w=480&h=480&auto=format' : '')
+
+  const imgDateAdded = (addDate ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
 
   const handleClose = () => {
     setOpen(false)
@@ -41,7 +47,7 @@ const ImageModal = ({ img, open, setOpen }) => {
             loading='lazy'
           />
           <Typography id='transition-modal-title' variant='h6' component='h2'>
-            {`${img.title} · ${img.width}x${img.height} · Likes: ${img.likes}`}
+            {`${img.width}x${img.height} · Likes: ${img.likes}${imgDateAdded}`}
           </Typography>
           <Typography id='transition-modal-description' sx={{ mt: 2 }}>
             {img.description}

@@ -13,10 +13,6 @@ const FoundImages = () => {
 
   useEffect(() => {
     dispatch(searchImages(searchTerm))
-    // console.log('searchterm ' + searchTerm)
-    // console.log(images)
-    // console.log('images loading: ' + imagesAreLoading)
-    // console.log('Error: ' + imagesHasError)
   }, [dispatch, searchTerm])
 
   if (imagesAreLoading) return <div>Loading Images</div>
@@ -25,7 +21,7 @@ const FoundImages = () => {
     return <div>No podemos conectar con el servidor. Inténtelo más tarde</div>
   }
   return (
-    <Gallery itemData={images} />
+    <Gallery itemData={images[images.length - 1].results} />
   )
 }
 
