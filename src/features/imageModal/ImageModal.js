@@ -1,4 +1,5 @@
 import { Modal, Box, Fade, Backdrop, Typography, IconButton, TextareaAutosize } from '@mui/material'
+import DownloadIcon from '@mui/icons-material/Download'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateFavImages } from '../favImages/favImagesSlice'
@@ -67,6 +68,22 @@ const ImageModal = ({ favModal, arrImages }) => {
     dispatch(updateFavImages())
   }
 
+  const downloadImage = () => {
+    fetch(img.urls.full)
+      .then(response => response.blob())
+      .then(blobObject => {
+        const blob = window.URL.createObjectURL(blobObject)
+        const anchor = document.createElement('a')
+        anchor.style.display = 'none'
+        anchor.href = blob
+        anchor.download = `${img.id}`
+        document.body.appendChild(anchor)
+        anchor.click()
+        window.URL.revokeObjectURL(blob)
+      })
+      .catch(() => console.log('No se ha podido descargar la imagen.'))
+  }
+
   useEffect(() => {
     setFavIcon(selectFavIcon(img.id))
   }, [open])
@@ -101,8 +118,18 @@ const ImageModal = ({ favModal, arrImages }) => {
           />
           <Typography id='transition-modal-title' variant='h6' component='h2'>
             {`${img.width}x${img.height} · Likes: ${img.likes}${imgDateAdded}`}
+            <IconButton
+              sx={{ color: 'black', padding: '0 .5rem' }}
+              onClick={downloadImage}
+            >
+
+              <DownloadIcon />
+
+            </IconButton>
           </Typography>
+
           {imageDescription}
+
         </Box>
       </Fade>
     </Modal>

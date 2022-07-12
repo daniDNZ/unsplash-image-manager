@@ -1,13 +1,13 @@
 import { TextField } from '@mui/material'
-import { useDispatch } from 'react-redux'
-import { setFavsFilterTerm } from './favsFilterTermSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectFavsFilterTerm, setFavsFilterTerm } from './favsFilterTermSlice'
 
 const FilterTerm = () => {
   const dispatch = useDispatch()
 
   return (
 
-    <TextField id='filterTerm' label='Filtrar por descripción' variant='outlined' onChange={e => dispatch(setFavsFilterTerm(e.target.value))} />
+    <TextField id='filterTerm' label='Filtrar por descripción' variant='outlined' defaultValue={useSelector(selectFavsFilterTerm)} onChange={e => dispatch(setFavsFilterTerm(e.target.value))} />
 
   )
 }

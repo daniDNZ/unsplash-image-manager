@@ -1,4 +1,5 @@
 import { Modal, Box, Fade, Backdrop, Typography, IconButton } from '@mui/material'
+import DownloadIcon from '@mui/icons-material/Download'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateFavImages } from '../features/favImages/favImagesSlice'
@@ -59,7 +60,6 @@ const ImageModal = ({ img, open, setOpen, addDate }) => {
         <Box sx={modalStyle}>
           <IconButton
             sx={{ color: 'red', position: 'absolute', backgroundColor: 'rgba(0, 0, 0, .1)', margin: '.5rem' }}
-            aria-label={`star ${img.title}`}
             onClick={favIconClickHandler}
           >
 
@@ -77,6 +77,14 @@ const ImageModal = ({ img, open, setOpen, addDate }) => {
           <Typography id='transition-modal-description' sx={{ mt: 2 }}>
             {img.description}
           </Typography>
+          <IconButton
+            sx={{ color: 'black' }}
+            onClick={favIconClickHandler}
+          >
+
+            <DownloadIcon />
+
+          </IconButton>
         </Box>
       </Fade>
     </Modal>
