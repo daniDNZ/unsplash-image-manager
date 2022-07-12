@@ -7,7 +7,7 @@ import { hasErrorFoundImages, isLoadingFoundImages, searchImages, selectFoundIma
 const FoundImages = () => {
   const dispatch = useDispatch()
   const searchTerm = useSelector(selectSearchTerm)
-  const images = useSelector(selectFoundImages)
+  const images = useSelector(selectFoundImages).results
   const imagesAreLoading = useSelector(isLoadingFoundImages)
   const imagesHasError = useSelector(hasErrorFoundImages)
 
@@ -21,7 +21,7 @@ const FoundImages = () => {
     return <div>No podemos conectar con el servidor. Inténtelo más tarde</div>
   }
   return (
-    <Gallery itemData={images[images.length - 1].results} />
+    <Gallery itemData={images} />
   )
 }
 

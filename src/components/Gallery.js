@@ -1,11 +1,11 @@
 import { ImageList } from '@mui/material'
-import { useEffect, useState } from 'react'
-import ImageModal from './ImageModal'
+import { useEffect } from 'react'
+import ImageModal from '../features/imageModal/ImageModal'
 import Image from './Image'
 
-const Gallery = ({ itemData, addDate }) => {
-  let addImageDate = false
-  if (addDate) addImageDate = true
+const Gallery = ({ itemData, favGallery }) => {
+  let favModal = false
+  if (favGallery) favModal = true
   let rowHeight = 120
   if (window.screen.width >= 1024) rowHeight = 240
   const arrImages = itemData
@@ -16,9 +16,6 @@ const Gallery = ({ itemData, addDate }) => {
   const hideImageBar = (e) => {
     e.currentTarget.children[1].style.opacity = 0
   }
-  // Modal
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [modalImg, setModalImg] = useState({})
 
   useEffect(() => {
     // Listeners
@@ -39,10 +36,10 @@ const Gallery = ({ itemData, addDate }) => {
     <>
       <ImageList cols={3} variant='quilted' rowHeight={rowHeight}>
         {arrImages.map((item) => (
-          <Image key={item.id} item={item} arrImages={arrImages} rowHeight={rowHeight} setModalImg={setModalImg} setModalIsOpen={setModalIsOpen} />
+          <Image key={item.id} item={item} arrImages={arrImages} rowHeight={rowHeight} />
         ))}
       </ImageList>
-      <ImageModal img={modalImg} open={modalIsOpen} setOpen={setModalIsOpen} addDate={addImageDate} />
+      <ImageModal favModal={favModal} arrImages={arrImages} />
     </>
   )
 }

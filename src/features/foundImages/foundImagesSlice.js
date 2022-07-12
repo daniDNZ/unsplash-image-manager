@@ -30,7 +30,7 @@ export const foundImagesSlice = createSlice({
       .addCase(searchImages.fulfilled, (state, action) => {
         state.isLoadingFoundImages = false
         state.hasError = false
-        state.images = [...state.images, action.payload]
+        state.images = action.payload
       })
       .addCase(searchImages.rejected, state => {
         state.isLoadingFoundImages = false

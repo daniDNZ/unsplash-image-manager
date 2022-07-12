@@ -1,10 +1,9 @@
 import { ImageListItemBar, ImageListItem, IconButton } from '@mui/material'
-import { useState } from 'react'
-import { getLocalStorageFavImages, isInFavs, selectFavIcon, splitUrl } from '../utils/functions'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import { useDispatch } from 'react-redux'
-import { updateFavImages } from '../features/favImages/favImagesSlice'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectFavImages, updateFavImages } from '../features/favImages/favImagesSlice'
+import { setModalImage, toggleModal } from '../features/imageModal/imageModalSlice'
+import { selectFavIcon, splitUrl, toggleFavImage } from '../utils/functions'
 
 const srcset = (imgUrl, size) => {
   const splitted = splitUrl(imgUrl)
@@ -16,42 +15,24 @@ const srcset = (imgUrl, size) => {
   }
 }
 
-const Image = ({ item, arrImages, rowHeight, setModalImg, setModalIsOpen }) => {
-  const [favIcon, setFavIcon] = useState(selectFavIcon(item.id))
+const Image = ({ item, arrImages, rowHeight }) => {
+  const [favIcon, setFavIcon] = useState()
   const dispatch = useDispatch()
+  const favImages = useSelector(selectFavImages)
 
-  const toggleFavImage = (idImg) => {
-    const localStorageFavs = getLocalStorageFavImages()
-    let favImages = ''
+  const handleOpen = () => {
+    dispatch(setModalImage(arrImages[arrImages.indexOf(item)]))
+    dispatch(toggleModal())
+  }
 
-    if (isInFavs(idImg, localStorageFavs)) {
-      favImages = JSON.stringify(localStorageFavs.filter(item => item.id !== idImg))
-      setFavIcon(<FavoriteBorderIcon />)
-    } else {
-      const newImage = arrImages.find(item => item.id === idImg)
-      localStorageFavs.push({
-        id: newImage.id,
-        description: newImage.description,
-        width: newImage.width,
-        height: newImage.height,
-        likes: newImage.likes,
-        urls: {
-          full: newImage.urls.full,
-          thumb: newImage.urls.thumb
-        },
-        date: new Date().toISOString()
-      })
-      favImages = JSON.stringify(localStorageFavs)
-      setFavIcon(<FavoriteIcon />)
-    }
-    window.localStorage.setItem('favImages', favImages)
+  const favIconClickHandler = () => {
+    setFavIcon(toggleFavImage(item.id, arrImages))
     dispatch(updateFavImages())
   }
 
-  const handleOpen = imgId => {
-    setModalImg(arrImages.find(item => item.id === imgId))
-    setModalIsOpen(true)
-  }
+  useEffect(() => {
+    setFavIcon(selectFavIcon(item.id))
+  }, [dispatch, favImages])
 
   return (
     <ImageListItem data-id={item.id} className='image-list-item'>
@@ -59,7 +40,7 @@ const Image = ({ item, arrImages, rowHeight, setModalImg, setModalIsOpen }) => {
         {...srcset(item.urls.thumb, rowHeight)}
         alt={item.alt_description}
         loading='lazy'
-        onClick={() => handleOpen(item.id)}
+        onClick={handleOpen}
       />
       <ImageListItemBar
         className='image-list-item__bar'
@@ -76,7 +57,7 @@ const Image = ({ item, arrImages, rowHeight, setModalImg, setModalIsOpen }) => {
           <IconButton
             sx={{ color: 'white' }}
             aria-label={`star ${item.title}`}
-            onClick={() => toggleFavImage(item.id)}
+            onClick={favIconClickHandler}
           >
 
             {favIcon}

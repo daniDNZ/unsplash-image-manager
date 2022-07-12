@@ -6,7 +6,7 @@ const FavImages = () => {
   const favImages = useSelector(selectFavImages)
 
   return (
-    <Gallery itemData={favImages} addDate />
+    <Gallery itemData={favImages} favGallery />
   )
 }
 

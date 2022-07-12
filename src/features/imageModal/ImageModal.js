@@ -1,9 +1,9 @@
-import { Modal, Box, Fade, Backdrop, Typography, IconButton } from '@mui/material'
+import { Modal, Box, Fade, Backdrop, Typography, IconButton, TextareaAutosize } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFavImages } from '../features/favImages/favImagesSlice'
-import { selectFoundImages } from '../features/foundImages/foundImagesSlice'
-import { selectFavIcon, splitUrl, toggleFavImage } from '../utils/functions'
+import { updateFavImages } from '../favImages/favImagesSlice'
+import { selectFavIcon, setLocalStorageFavImages, splitUrl, toggleFavImage } from '../../utils/functions'
+import { selectModalImage, setModalImage, selectModalOpen, toggleModal } from './imageModalSlice'
 
 const modalStyle = {
   position: 'absolute',
@@ -21,17 +21,45 @@ const modalStyle = {
   p: 4
 }
 
-const ImageModal = ({ img, open, setOpen, addDate }) => {
+const ImageModal = ({ favModal, arrImages }) => {
   const [favIcon, setFavIcon] = useState(<></>)
   const dispatch = useDispatch()
-  const arrImages = useSelector(selectFoundImages).results
+  const open = useSelector(selectModalOpen)
+  const img = useSelector(selectModalImage)
 
   const src = (img.urls ? splitUrl(img.urls.thumb) + '?w=480&h=480&auto=format' : '')
+  const imgDateAdded = (favModal ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
 
-  const imgDateAdded = (addDate ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
+  const updateDescription = e => {
+    const arrFavImages = [...arrImages]
+    const imgIndex = arrImages.findIndex((item, index) => {
+      if (item.id === img.id) return true
+      else return false
+    })
+    arrFavImages[imgIndex] = { ...arrFavImages[imgIndex], description: e.target.value }
+
+    setLocalStorageFavImages(arrFavImages)
+    dispatch(updateFavImages())
+    dispatch(setModalImage(arrFavImages[imgIndex]))
+  }
+
+  const imageDescription = (favModal
+    ? (
+      <TextareaAutosize
+        maxRows={4}
+        placeholder='Sin descripción'
+        defaultValue={img.description}
+        onChange={updateDescription}
+      />
+      )
+    : (
+      <Typography id='transition-modal-description' sx={{ mt: 2 }}>
+        {img.description}
+      </Typography>
+      ))
 
   const handleClose = () => {
-    setOpen(false)
+    dispatch(toggleModal())
   }
 
   const favIconClickHandler = () => {
@@ -58,7 +86,7 @@ const ImageModal = ({ img, open, setOpen, addDate }) => {
       <Fade in={open}>
         <Box sx={modalStyle}>
           <IconButton
-            sx={{ color: 'red', position: 'absolute', backgroundColor: 'rgba(0, 0, 0, .1)', margin: '.5rem' }}
+            sx={{ color: 'red', position: 'absolute', margin: '.5rem' }}
             aria-label={`star ${img.title}`}
             onClick={favIconClickHandler}
           >
@@ -74,9 +102,7 @@ const ImageModal = ({ img, open, setOpen, addDate }) => {
           <Typography id='transition-modal-title' variant='h6' component='h2'>
             {`${img.width}x${img.height} · Likes: ${img.likes}${imgDateAdded}`}
           </Typography>
-          <Typography id='transition-modal-description' sx={{ mt: 2 }}>
-            {img.description}
-          </Typography>
+          {imageDescription}
         </Box>
       </Fade>
     </Modal>
