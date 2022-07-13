@@ -8,8 +8,15 @@ export const searchImages = createAsyncThunk(
         Authorization: `Client-ID ${process.env.REACT_APP_ACCESS_KEY}`
       }
     }
-    const data = await fetch(`${process.env.REACT_APP_API_URI}/search/photos?query=${searchTerm}&per_page=40`, options)
+    let url
+    searchTerm.length !== 0
+      ? url = `${process.env.REACT_APP_API_URI}/search/photos?query=${searchTerm}&per_page=30`
+      : url = `${process.env.REACT_APP_API_URI}/photos?per_page=30&order_by=popular`
+    const data = await fetch(url, options)
     const json = await data.json()
+
+    if (searchTerm.length !== 0) return json.results
+
     return json
   }
 )
