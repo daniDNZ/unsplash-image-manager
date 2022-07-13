@@ -29,7 +29,7 @@ const ImageModal = ({ favModal, arrImages }) => {
   const img = useSelector(selectModalImage)
 
   const src = (img.urls ? splitUrl(img.urls.thumb) + '?w=480&h=480&auto=format' : '')
-  const imgDateAdded = (favModal ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
+  const imgAddedDate = (favModal ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
 
   const updateDescription = e => {
     const arrFavImages = [...arrImages]
@@ -117,7 +117,7 @@ const ImageModal = ({ favModal, arrImages }) => {
             loading='lazy'
           />
           <Typography id='transition-modal-title' variant='h6' component='h2'>
-            {`${img.width}x${img.height} · Likes: ${img.likes}${imgDateAdded}`}
+            {`${img.width}x${img.height} · Likes: ${img.likes}${imgAddedDate}`}
             <IconButton
               sx={{ color: 'black', padding: '0 .5rem' }}
               onClick={downloadImage}

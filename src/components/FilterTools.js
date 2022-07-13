@@ -4,9 +4,7 @@ import FavsOrderTerm from '../features/favsOrderTerm/FavsOrderTerm'
 
 const FilterTools = ({ isVisible }) => {
   let display = 'none'
-  isVisible
-    ? display = 'flex'
-    : display = 'none'
+  isVisible ? display = 'flex' : display = 'none'
 
   return (
     <Box

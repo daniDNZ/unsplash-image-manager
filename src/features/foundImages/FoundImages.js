@@ -21,7 +21,7 @@ const FoundImages = () => {
     return <div>No podemos conectar con el servidor. Inténtelo más tarde</div>
   }
   return (
-    <Gallery itemData={images} />
+    <Gallery arrImages={images} />
   )
 }
 

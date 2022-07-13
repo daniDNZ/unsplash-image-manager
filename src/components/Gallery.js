@@ -1,31 +1,9 @@
 import { ImageList } from '@mui/material'
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { selectFavsFilterTerm } from '../features/favsFilterTerm/favsFilterTermSlice'
-import { selectFavsOrderTerm } from '../features/favsOrderTerm/favsOrderTermSlice'
 import ImageModal from '../features/imageModal/ImageModal'
 import Image from './Image'
 
-const Gallery = ({ itemData, favGallery }) => {
-  let favModal = false
-  let favsFilterTerm = ''
-  let arrImages = []
-
-  if (favGallery) {
-    favModal = true
-    favsFilterTerm = useSelector(selectFavsFilterTerm)
-    if (favsFilterTerm !== '') {
-      arrImages = [...itemData.filter(item => {
-        return item.description !== null
-          ? item.description.search(favsFilterTerm) !== -1
-          : false
-      })]
-    } else arrImages = [...itemData]
-
-    const favsOrderTerm = useSelector(selectFavsOrderTerm)
-    arrImages.sort((a, b) => b[favsOrderTerm] - a[favsOrderTerm])
-  } else arrImages = [...itemData]
-
+const Gallery = ({ arrImages, favModal }) => {
   let rowHeight = 120
   if (window.screen.width >= 1024) rowHeight = 240
 
@@ -50,7 +28,7 @@ const Gallery = ({ itemData, favGallery }) => {
         item.removeEventListener('mouseleave', hideImageBar)
       })
     }
-  }, [itemData])
+  }, [arrImages])
   return (
     <>
       <ImageList cols={3} variant='quilted' rowHeight={rowHeight}>
