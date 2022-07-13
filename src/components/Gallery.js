@@ -5,7 +5,6 @@ import Image from './Image'
 const Gallery = ({ arrImages, favModal }) => {
   let rowHeight = 120
   if (window.screen.width >= 1024) rowHeight = 240
-  console.log(arrImages)
 
   return (
     <>

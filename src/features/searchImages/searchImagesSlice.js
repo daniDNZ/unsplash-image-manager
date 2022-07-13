@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const searchImages = createAsyncThunk(
-  'foundImages/fetchImages',
+  'searchImages/fetchImages',
   async (searchTerm) => {
     const options = {
       headers: {
@@ -21,34 +21,37 @@ export const searchImages = createAsyncThunk(
   }
 )
 
-export const foundImagesSlice = createSlice({
-  name: 'foundImages',
+export const searchImagesSlice = createSlice({
+  name: 'searchImages',
   initialState: {
-    images: [],
-    isLoadingFoundImages: false,
-    hasError: false
+    results: [],
+    status: null,
+    term: ''
+  },
+  reducers: {
+    setSearchTerm: (state, action) => {
+      state.term = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(searchImages.pending, state => {
-        state.isLoadingFoundImages = true
-        state.hasError = false
+        state.status = 'loading'
       })
       .addCase(searchImages.fulfilled, (state, action) => {
-        state.isLoadingFoundImages = false
-        state.hasError = false
-        state.images = action.payload
+        state.status = null
+        state.results = action.payload
       })
       .addCase(searchImages.rejected, state => {
-        state.isLoadingFoundImages = false
-        state.hasError = true
-        state.images = []
+        state.status = 'error'
       })
   }
 })
 
-export const selectFoundImages = (state) => state.foundImages.images
-export const isLoadingFoundImages = (state) => state.foundImages.isLoadingFoundImages
-export const hasErrorFoundImages = (state) => state.foundImages.hasError
+export const { setSearchTerm } = searchImagesSlice.actions
 
-export default foundImagesSlice.reducer
+export const selectSearchImages = (state) => state.searchImages.results
+export const selectStatusSearchImages = (state) => state.searchImages.status
+export const selectSearchTerm = (state) => state.searchImages.term
+
+export default searchImagesSlice.reducer

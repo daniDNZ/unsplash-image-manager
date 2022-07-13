@@ -1,33 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getLocalStorageFavImages } from '../../utils/functions'
-import { selectFavsFilterTerm } from '../favsFilterTerm/favsFilterTermSlice'
 
 export const favImagesSlice = createSlice({
   name: 'favImages',
   initialState: {
-    images: getLocalStorageFavImages(),
-    filteredImages: [],
-    orderedImages: []
+    results: getLocalStorageFavImages(),
+    filterTerm: null,
+    orderTerm: 'date'
   },
   reducers: {
-    updateFavImages: (state) => { state.images = getLocalStorageFavImages() },
-    filterByTerm: (state) => {
-      const arrayFiltered = []
-      state.images.foreach(image => {
-        if (image.description.search((selectFavsFilterTerm())) !== -1) {
-          arrayFiltered.push(image)
-        }
-        state.filteredImages = arrayFiltered
-      })
+    updateFavImages: (state) => { state.results = getLocalStorageFavImages() },
+    setFilterTerm: (state, action) => {
+      state.filterTerm = action.payload
     },
-    orderImages: (state, action) => {
-
+    setOrderTerm: (state, action) => {
+      state.orderTerm = action.payload
     }
   }
 })
 
-export const { updateFavImages } = favImagesSlice.actions
+export const { updateFavImages, setFilterTerm, setOrderTerm } = favImagesSlice.actions
 
-export const selectFavImages = (state) => state.favImages.images
+export const selectFavImages = (state) => state.favImages.results
+export const selectFilterTerm = (state) => state.favImages.filterTerm
+export const selectOrderTerm = (state) => state.favImages.orderTerm
 
 export default favImagesSlice.reducer

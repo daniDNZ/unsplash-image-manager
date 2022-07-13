@@ -1,24 +1,22 @@
 import { useSelector } from 'react-redux'
 import Gallery from '../../components/Gallery'
-import { selectFavsFilterTerm } from '../favsFilterTerm/favsFilterTermSlice'
-import { selectFavsOrderTerm } from '../favsOrderTerm/favsOrderTermSlice'
-import { selectFavImages } from './favImagesSlice'
+import { selectFavImages, selectFilterTerm, selectOrderTerm } from './favImagesSlice'
 
 const FavImages = () => {
   const favImages = useSelector(selectFavImages)
-  const favsFilterTerm = useSelector(selectFavsFilterTerm)
+  const filterTerm = useSelector(selectFilterTerm)
   let arrImages = []
 
   // Sort and filter
-  if (favsFilterTerm !== '') {
+  if (filterTerm) {
     arrImages = [...favImages.filter(item => {
       return item.description !== null
-        ? item.description.search(favsFilterTerm) !== -1
+        ? item.description.search(filterTerm) !== -1
         : false
     })]
   } else arrImages = [...favImages]
 
-  const favsOrderTerm = useSelector(selectFavsOrderTerm)
+  const favsOrderTerm = useSelector(selectOrderTerm)
   arrImages.sort((a, b) => b[favsOrderTerm] - a[favsOrderTerm])
 
   return (
