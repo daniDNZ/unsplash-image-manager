@@ -32,15 +32,16 @@ const ImageModal = ({ favModal, arrImages }) => {
   const imgAddedDate = (favModal ? (new Date(img.date).toLocaleDateString()) : '')
 
   const updateDescription = e => {
-    const imgIndex = arrImages.findIndex((item, index) => {
+    const arrFavImagesCopy = [...arrFavImages]
+    const imgIndex = arrFavImagesCopy.findIndex((item, index) => {
       if (item.id === img.id) return true
       else return false
     })
-    arrFavImages[imgIndex] = { ...arrFavImages[imgIndex], description: e.target.value }
+    arrFavImagesCopy[imgIndex] = { ...arrFavImagesCopy[imgIndex], description: e.target.value }
 
-    setLocalStorageFavImages(arrFavImages)
+    setLocalStorageFavImages(arrFavImagesCopy)
     dispatch(updateFavImages())
-    dispatch(setModalImage(arrFavImages[imgIndex]))
+    dispatch(setModalImage(arrFavImagesCopy[imgIndex]))
   }
 
   const imageDescription = (favModal
