@@ -1,17 +1,15 @@
 import { Box, Chip, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addFilterTags, removeFilterTags, selectFilterTerm, selectOrderTerm, filterByTerm, setOrderTerm, selectFilterTags } from '../features/favImages/favImagesSlice'
-import tags from '../utils/data/tags.json'
+import { addFilterTags, removeFilterTags, selectFilterTerm, selectOrderTerm, filterByTerm, setOrderTerm, selectFilterTags, selectTotalTags } from '../features/favImages/favImagesSlice'
 
 const FilterTools = ({ isVisible }) => {
   const dispatch = useDispatch()
   const order = useSelector(selectOrderTerm)
   let display = 'none'
   isVisible ? display = 'block' : display = 'none'
-  const arrChips = tags
+  const arrChips = useSelector(selectTotalTags)
   const activeTags = useSelector(selectFilterTags)
-
   const handleChip = (e) => {
     const chip = e.currentTarget
     if (chip.style.color === 'white') {
@@ -62,8 +60,8 @@ const FilterTools = ({ isVisible }) => {
         justifyContent='flex-end' gap='.5rem' display='flex' flexWrap='wrap' mt='1rem'
       >
         {
-          arrChips.map(chip => {
-            return <Chip key={'chip-' + chip} className='tag-chip' label={chip} variant='outlined' onClick={handleChip} />
+          arrChips.map((chip, index) => {
+            return index > 25 ? null : <Chip key={'chip-' + chip} className='tag-chip' label={chip} variant='outlined' onClick={handleChip} />
           })
         }
       </Box>

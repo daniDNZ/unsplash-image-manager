@@ -54,7 +54,8 @@ const toggleFavImage = (idImg, arrImages) => {
         full: newImage.urls.full,
         thumb: newImage.urls.thumb
       },
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      tags: newImage.tags
     })
     favImages = localStorageFavs
     favIcon = <FavoriteIcon />

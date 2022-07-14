@@ -1,4 +1,4 @@
-import { Modal, Box, Fade, Backdrop, Typography, IconButton, TextareaAutosize } from '@mui/material'
+import { Modal, Box, Fade, Backdrop, Typography, IconButton, TextareaAutosize, List, ListItem, ListItemText } from '@mui/material'
 import DownloadIcon from '@mui/icons-material/Download'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,6 @@ const modalStyle = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   maxWidth: '80vw',
-  maxHeight: '80vh',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -29,7 +28,7 @@ const ImageModal = ({ favModal, arrImages }) => {
   const img = useSelector(selectModalImage)
 
   const src = (img.urls ? splitUrl(img.urls.thumb) + '?w=480&h=480&auto=format' : '')
-  const imgAddedDate = (favModal ? (' · ' + new Date(img.date).toLocaleDateString()) : '')
+  const imgAddedDate = (favModal ? (new Date(img.date).toLocaleDateString()) : '')
 
   const updateDescription = e => {
     const arrFavImages = [...arrImages]
@@ -116,17 +115,32 @@ const ImageModal = ({ favModal, arrImages }) => {
             alt=''
             loading='lazy'
           />
-          <Typography id='transition-modal-title' variant='h6' component='h2'>
-            {`${img.width}x${img.height} · Likes: ${img.likes}${imgAddedDate}`}
+          <List dense sx={{ padding: '1rem 0' }}>
+            <ListItem sx={{ padding: 0 }}>
+              <ListItemText
+                primary={`Tamaño: ${img.width}x${img.height}`}
+              />
+            </ListItem>
+            <ListItem sx={{ padding: 0 }}>
+              <ListItemText
+                primary={`Likes: ${img.likes}`}
+              />
+            </ListItem>
+            <ListItem sx={{ padding: 0 }}>
+              <ListItemText
+                primary={`Añadido: ${imgAddedDate}`}
+              />
+            </ListItem>
             <IconButton
-              sx={{ color: 'black', padding: '0 .5rem' }}
+              sx={{ color: 'black', padding: '1rem 0', position: 'absolute', right: 0, top: 0 }}
               onClick={downloadImage}
             >
 
               <DownloadIcon />
 
             </IconButton>
-          </Typography>
+
+          </List>
 
           {imageDescription}
 

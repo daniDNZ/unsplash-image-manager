@@ -10,21 +10,21 @@ const SearchImages = () => {
   const searchTerm = useSelector(selectSearchTerm)
   const images = useSelector(selectSearchImages)
   const status = useSelector(selectStatusSearchImages)
-
   // Debounce search term
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
   useEffect(() => {
-    dispatch(searchImages(debouncedSearchTerm))
+    dispatch(searchImages({ searchTerm: debouncedSearchTerm }))
   }, [dispatch, debouncedSearchTerm])
 
   switch (status) {
-    case 'loading':
-      return <div>Loading Images</div>
+    case 'fulfilled':
+      return <Gallery imagesObj={images} />
     case 'error':
       return <div>No podemos conectar con el servidor. Inténtelo más tarde</div>
+    case 'loading':
     default:
-      return <Gallery arrImages={images} />
+      return <div>Loading Images</div>
   }
 }
 
