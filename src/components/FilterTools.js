@@ -1,13 +1,16 @@
 import { Box, Chip, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addFilterTags, removeFilterTags, selectFilterTerm, selectOrderTerm, filterByTerm, setOrderTerm } from '../features/favImages/favImagesSlice'
+import { addFilterTags, removeFilterTags, selectFilterTerm, selectOrderTerm, filterByTerm, setOrderTerm, selectFilterTags } from '../features/favImages/favImagesSlice'
+import tags from '../utils/data/tags.json'
 
 const FilterTools = ({ isVisible }) => {
   const dispatch = useDispatch()
   const order = useSelector(selectOrderTerm)
   let display = 'none'
   isVisible ? display = 'block' : display = 'none'
-  const arrChips = ['car', 'travel', 'flower', 'pet', 'animal', 'portrait', 'cherry', 'mountain', 'home', 'fruit', 'nature']
+  const arrChips = tags
+  const activeTags = useSelector(selectFilterTags)
 
   const handleChip = (e) => {
     const chip = e.currentTarget
@@ -21,6 +24,16 @@ const FilterTools = ({ isVisible }) => {
       dispatch(addFilterTags(chip.children[0].textContent))
     }
   }
+
+  useEffect(() => {
+    // Highlight active tags when user returns from search page
+    const tagChips = document.querySelectorAll('.tag-chip')
+    activeTags.forEach(tag => {
+      const activeTag = Array.from(tagChips).filter(chip => chip.children[0].textContent === tag)
+      activeTag[0].style.backgroundColor = 'rgb(23,125,220)'
+      activeTag[0].style.color = 'white'
+    })
+  }, [])
 
   return (
     <Box id='filterTools' mt='1rem' width='100%' display={display}>
@@ -50,7 +63,7 @@ const FilterTools = ({ isVisible }) => {
       >
         {
           arrChips.map(chip => {
-            return <Chip key={'chip-' + chip} label={chip} variant='outlined' onClick={handleChip} />
+            return <Chip key={'chip-' + chip} className='tag-chip' label={chip} variant='outlined' onClick={handleChip} />
           })
         }
       </Box>
