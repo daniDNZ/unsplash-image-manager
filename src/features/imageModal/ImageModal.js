@@ -2,7 +2,7 @@ import { Modal, Box, Fade, Backdrop, Typography, IconButton, TextareaAutosize, L
 import DownloadIcon from '@mui/icons-material/Download'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateFavImages } from '../favImages/favImagesSlice'
+import { selectFavImages, updateFavImages } from '../favImages/favImagesSlice'
 import { selectFavIcon, setLocalStorageFavImages, splitUrl, toggleFavImage } from '../../utils/functions'
 import { selectModalImage, setModalImage, selectModalOpen, toggleModal } from './imageModalSlice'
 
@@ -26,12 +26,12 @@ const ImageModal = ({ favModal, arrImages }) => {
   const dispatch = useDispatch()
   const open = useSelector(selectModalOpen)
   const img = useSelector(selectModalImage)
+  const arrFavImages = useSelector(selectFavImages).totalImages
 
   const src = (img.urls ? splitUrl(img.urls.thumb) + '?w=480&h=480&auto=format' : '')
   const imgAddedDate = (favModal ? (new Date(img.date).toLocaleDateString()) : '')
 
   const updateDescription = e => {
-    const arrFavImages = [...arrImages]
     const imgIndex = arrImages.findIndex((item, index) => {
       if (item.id === img.id) return true
       else return false
