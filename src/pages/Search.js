@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import SearchTerm from '../features/searchTerm/SearchTerm'
-import FoundImages from '../features/foundImages/FoundImages'
+import SearchBox from '../components/SearchBox'
+import SearchImages from '../features/searchImages/SearchImages'
 
 const Search = () => {
   return (
@@ -9,9 +9,9 @@ const Search = () => {
         <Typography variant='h3' component='h1' align='center' fontWeight={600} sx={{ flexGrow: 1 }}>
           Encuentra la foto perfecta
         </Typography>
-        <SearchTerm />
+        <SearchBox />
       </Box>
-      <FoundImages />
+      <SearchImages />
     </>
   )
 }

@@ -1,8 +1,8 @@
 import { Box, TextField } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { setSearchTerm } from './searchTermSlice'
+import { setSearchTerm } from '../features/searchImages/searchImagesSlice'
 
-const searchTerm = () => {
+const searchBox = () => {
   const dispatch = useDispatch()
 
   return (
@@ -11,4 +11,4 @@ const searchTerm = () => {
     </Box>
   )
 }
-export default searchTerm
+export default searchBox

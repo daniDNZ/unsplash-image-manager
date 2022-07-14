@@ -30,12 +30,22 @@ const Image = ({ item, arrImages, rowHeight }) => {
     dispatch(updateFavImages())
   }
 
+  const showImageBar = (e) => {
+    e.currentTarget.children[1].style.opacity = 1
+  }
+  const hideImageBar = (e) => {
+    e.currentTarget.children[1].style.opacity = 0
+  }
+
   useEffect(() => {
     setFavIcon(selectFavIcon(item.id))
   }, [dispatch, favImages])
 
   return (
-    <ImageListItem data-id={item.id} className='image-list-item'>
+    <ImageListItem
+      data-id={item.id} className='image-list-item' onMouseOver={showImageBar}
+      onMouseLeave={hideImageBar}
+    >
       <img
         {...srcset(item.urls.thumb, rowHeight)}
         alt={item.alt_description}

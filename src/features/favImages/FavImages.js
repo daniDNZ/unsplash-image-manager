@@ -1,28 +1,36 @@
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Gallery from '../../components/Gallery'
-import { selectFavsFilterTerm } from '../favsFilterTerm/favsFilterTermSlice'
-import { selectFavsOrderTerm } from '../favsOrderTerm/favsOrderTermSlice'
-import { selectFavImages } from './favImagesSlice'
+import { selectFilteredFavImages, selectOrderTerm } from './favImagesSlice'
 
 const FavImages = () => {
-  const favImages = useSelector(selectFavImages)
-  const favsFilterTerm = useSelector(selectFavsFilterTerm)
-  let arrImages = []
+  const favImages = useSelector(selectFilteredFavImages)
+  const arrImages = [...favImages.totalImages]
 
-  // Sort and filter
-  if (favsFilterTerm !== '') {
-    arrImages = [...favImages.filter(item => {
-      return item.description !== null
-        ? item.description.search(favsFilterTerm) !== -1
-        : false
-    })]
-  } else arrImages = [...favImages]
+  const favsOrderTerm = useSelector(selectOrderTerm)
 
-  const favsOrderTerm = useSelector(selectFavsOrderTerm)
   arrImages.sort((a, b) => b[favsOrderTerm] - a[favsOrderTerm])
 
+  const [imagesObj, setImagesObj] = useState({
+    results: arrImages.slice(0, 30),
+    totalPages: 1,
+    currentPage: 1,
+    totalImages: arrImages
+  })
+
+  useEffect(() => {
+    const totalPages = Math.ceil(arrImages.length / 30)
+
+    setImagesObj({
+      ...imagesObj,
+      results: arrImages.slice(0, 30),
+      totalImages: arrImages,
+      totalPages
+    })
+  }, [favsOrderTerm, favImages])
+
   return (
-    <Gallery arrImages={arrImages} favModal />
+    <Gallery imagesObj={imagesObj} favGallery setImagesObj={setImagesObj} />
   )
 }
 

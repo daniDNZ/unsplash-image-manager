@@ -1,34 +1,28 @@
-import { ImageList } from '@mui/material'
-import { useEffect } from 'react'
+import { ImageList, Pagination } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
 import ImageModal from '../features/imageModal/ImageModal'
+import { searchImages, selectSearchTerm } from '../features/searchImages/searchImagesSlice'
 import Image from './Image'
 
-const Gallery = ({ arrImages, favModal }) => {
+const Gallery = ({ imagesObj, favGallery, setImagesObj }) => {
+  const dispatch = useDispatch()
+  const arrImages = imagesObj.results
+  const searchTerm = useSelector(selectSearchTerm)
   let rowHeight = 120
   if (window.screen.width >= 1024) rowHeight = 240
 
-  const showImageBar = (e) => {
-    e.currentTarget.children[1].style.opacity = 1
-  }
-  const hideImageBar = (e) => {
-    e.currentTarget.children[1].style.opacity = 0
-  }
-
-  useEffect(() => {
-    // Listeners
-    const imageListItems = document.querySelectorAll('.image-list-item')
-    imageListItems.forEach(item => {
-      item.addEventListener('mouseover', showImageBar)
-      item.addEventListener('mouseleave', hideImageBar)
-    })
-
-    return () => {
-      imageListItems.forEach(item => {
-        item.removeEventListener('mouseover', showImageBar)
-        item.removeEventListener('mouseleave', hideImageBar)
+  const handlePageChange = (e, value) => {
+    if (favGallery) {
+      setImagesObj({
+        ...imagesObj,
+        results: imagesObj.totalImages.slice(((value - 1) * 30), (value * 30)),
+        currentPage: value
       })
+    } else {
+      dispatch(searchImages({ searchTerm, page: value }))
     }
-  }, [arrImages])
+  }
+
   return (
     <>
       <ImageList cols={3} variant='quilted' rowHeight={rowHeight}>
@@ -36,7 +30,8 @@ const Gallery = ({ arrImages, favModal }) => {
           <Image key={item.id} item={item} arrImages={arrImages} rowHeight={rowHeight} />
         ))}
       </ImageList>
-      <ImageModal favModal={favModal} arrImages={arrImages} />
+      <Pagination count={imagesObj.totalPages} page={imagesObj.currentPage} onChange={handlePageChange} sx={{ width: 'fit-content', margin: '0 auto 1rem auto' }} />
+      <ImageModal favModal={favGallery} arrImages={favGallery ? imagesObj.totalImages : imagesObj.results} />
     </>
   )
 }
