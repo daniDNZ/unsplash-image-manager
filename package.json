@@ -1,6 +1,7 @@
 {
   "name": "unsplash-image-manager",
-  "version": "0.1.0",
+  "homepage": "https://danidnz.github.io/unsplash-image-manager",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "11.9.3",
@@ -23,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^4.0.0",
     "standard": "17.0.0"
   }
 }
