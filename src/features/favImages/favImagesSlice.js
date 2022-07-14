@@ -94,6 +94,12 @@ export const favImagesSlice = createSlice({
         totalImages: arrResults
       }
       state.filteredResults = { ...state.results }
+      if (state.activeTags.length > 0) {
+        state.filteredResults = searchByTags(state.filteredResults.totalImages, state.activeTags)
+      }
+      if (state.filterTerm && state.filterTerm.length > 0) {
+        state.filteredResults = searchByDescription(state.filteredResults.totalImages, state.filterTerm)
+      }
       state.totalTags = updateTotalTags(state.results.totalImages)
     },
     filterByTerm: (state, action) => {
