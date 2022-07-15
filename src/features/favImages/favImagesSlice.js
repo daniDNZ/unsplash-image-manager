@@ -9,22 +9,22 @@ const buildResultObject = totalImages => ({
 })
 
 const searchByDescription = (arrImages, term) => {
-  const filteredImages = [...arrImages.filter(item => {
+  const filteredImages = arrImages.filter(item => {
     return item.description !== null
-      ? item.description.search(term) !== -1
+      ? item.description.toLowerCase().search(term.toLowerCase()) !== -1
       : false
-  })]
+  })
   return buildResultObject(filteredImages)
 }
 
 const searchInTags = (arrImages, tag) => {
-  const filteredImages = [...arrImages.filter(item => {
+  const filteredImages = arrImages.filter(item => {
     if (item.tags !== undefined) {
-      const found = item.tags.find(iTag => iTag.title === tag)
+      const found = item.tags.find(iTag => iTag.title.toLowerCase() === tag.toLowerCase())
       return found !== undefined
     }
     return false
-  })]
+  })
   return filteredImages
 }
 
