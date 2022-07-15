@@ -1,0 +1,9 @@
+div.tag-chip--active {
+  background-color: rgb(23, 125, 220);
+  color: white;
+}
+
+div.tag-chip--active:hover {
+  color: rgb(23, 125, 220);
+  ;
+}

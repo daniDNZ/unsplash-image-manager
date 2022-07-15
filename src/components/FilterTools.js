@@ -2,6 +2,7 @@ import { Box, Chip, FormControl, InputLabel, MenuItem, Select, TextField } from 
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFilterTags, removeFilterTags, selectFilterTerm, selectOrderTerm, filterByTerm, setOrderTerm, selectFilterTags, selectTotalTags } from '../features/favImages/favImagesSlice'
+import '../css/chip.css'
 
 const FilterTools = ({ isVisible }) => {
   const dispatch = useDispatch()
@@ -12,13 +13,11 @@ const FilterTools = ({ isVisible }) => {
   const activeTags = useSelector(selectFilterTags)
   const handleChip = (e) => {
     const chip = e.currentTarget
-    if (chip.style.color === 'white') {
-      chip.style.color = 'inherit'
-      chip.style.backgroundColor = 'inherit'
+    if (chip.classList.contains('tag-chip--active')) {
+      chip.classList.remove('tag-chip--active')
       dispatch(removeFilterTags(chip.children[0].textContent))
     } else {
-      chip.style.backgroundColor = 'rgb(23,125,220)'
-      chip.style.color = 'white'
+      chip.classList.add('tag-chip--active')
       dispatch(addFilterTags(chip.children[0].textContent))
     }
   }
@@ -28,8 +27,7 @@ const FilterTools = ({ isVisible }) => {
     const tagChips = document.querySelectorAll('.tag-chip')
     activeTags.forEach(tag => {
       const activeTag = Array.from(tagChips).filter(chip => chip.children[0].textContent === tag)
-      activeTag[0].style.backgroundColor = 'rgb(23,125,220)'
-      activeTag[0].style.color = 'white'
+      activeTag[0].classList.add('tag-chip--active')
     })
   }, [])
 
