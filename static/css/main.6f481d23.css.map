@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.6f481d23.css","mappings":"AAAA,qBACE,wBAAmC,CACnC,UACF,CAEA,2BACE,aAEF","sources":["css/chip.css"],"sourcesContent":["div.tag-chip--active {\n  background-color: rgb(23, 125, 220);\n  color: white;\n}\n\ndiv.tag-chip--active:hover {\n  color: rgb(23, 125, 220);\n  ;\n}"],"names":[],"sourceRoot":""}
